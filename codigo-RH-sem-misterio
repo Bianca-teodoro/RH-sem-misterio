@@ -1,0 +1,106 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class mainColaborador {
+    public static void main(String[] args) {
+        Scanner entrada = new Scanner(System.in);
+
+        // Listas básicas
+        ArrayList<String> nomes = new ArrayList<>();
+        ArrayList<Integer> matriculas = new ArrayList<>();
+        ArrayList<String> tipos = new ArrayList<>();
+        ArrayList<Double> salarios = new ArrayList<>();
+
+        // Listas para detalhes específicos
+        ArrayList<String> detalhes = new ArrayList<>(); // Armazenará a descrição das vendas/peças
+
+        int tipoColaborador;
+
+        do {
+            System.out.println("\n--- MENU DE CADASTRO ---");
+            System.out.println("1 - Colaborador Padrão");
+            System.out.println("2 - Colaborador Comissionado");
+            System.out.println("3 - Funcionário de Produção");
+            System.out.println("4 - Gerar Folha de Pagamento / Exibir Todos");
+            System.out.println("0 - Encerrar o programa");
+            System.out.print("Escolha uma opção: ");
+            
+            tipoColaborador = entrada.nextInt();
+            entrada.nextLine(); 
+
+            if (tipoColaborador < 0 || tipoColaborador > 4) {
+                System.out.println("Opção inválida!");
+                continue; 
+            }
+
+            if (tipoColaborador >= 1 && tipoColaborador <= 3) {
+                System.out.print("Nome: ");
+                String nomeInformado = entrada.nextLine();
+
+                int matriculaInformada;
+                while (true) {
+                    System.out.print("Matrícula: ");
+                    matriculaInformada = entrada.nextInt();
+                    if (matriculaInformada >= 0) break;
+                    System.out.println("Erro: A matrícula não pode ser negativa.");
+                }
+
+                nomes.add(nomeInformado);
+                matriculas.add(matriculaInformada);
+
+                switch (tipoColaborador) {
+                    case 1:
+                        tipos.add("Padrão");
+                        salarios.add(2000.0);
+                        detalhes.add("N/A");
+                        System.out.println("Cadastrado com sucesso!");
+                        break;
+
+                    case 2:
+                        System.out.print("Quantidade de vendas realizadas: ");
+                        double vendas = entrada.nextDouble();
+                        System.out.print("Comissão percentual (%): ");
+                        double percentual = entrada.nextDouble();
+                        
+                        salarios.add(2000 + (vendas * percentual / 100));
+                        tipos.add("Comissionado");
+                        detalhes.add(String.format("Vendas: R$%.2f (%.1f%%)", vendas, percentual));
+                        System.out.println("Cadastrado com sucesso!");
+                        break;
+
+                    case 3:
+                        System.out.print("Quantidade de peças produzidas: ");
+                        int qtd = entrada.nextInt();
+                        System.out.print("Valor por peça (R$): ");
+                        double valPeca = entrada.nextDouble();
+                        
+                        salarios.add(2000 + (valPeca * qtd));
+                        tipos.add("Produção");
+                        detalhes.add(String.format("%d peças (R$%.2f/un)", qtd, valPeca));
+                        System.out.println("Cadastrado com sucesso!");
+                        break;
+                }
+            } else if (tipoColaborador == 4) {
+                System.out.println("\n================================================================================================");
+                System.out.println("                                     FOLHA DE PAGAMENTO                                         ");
+                System.out.println("================================================================================================");
+                System.out.printf("%-10s | %-15s | %-13s | %-25s | %-10s%n", "MATRIC.", "NOME", "TIPO", "DETALHES DE PRODUÇÃO/VENDA", "SALÁRIO");
+                System.out.println("------------------------------------------------------------------------------------------------");
+
+                for (int i = 0; i < nomes.size(); i++) {
+                    System.out.printf("%-10d | %-15s | %-13s | %-25s | R$ %.2f%n", 
+                            matriculas.get(i), 
+                            nomes.get(i), 
+                            tipos.get(i), 
+                            detalhes.get(i),
+                            salarios.get(i));
+                }
+                System.out.println("================================================================================================");
+            }
+
+        } while (tipoColaborador != 0);
+
+        System.out.println("Programa encerrado.");
+        entrada.close();
+    }
+}
